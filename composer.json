@@ -1,9 +1,14 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "kenzieradhika/project-cbcb",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "TokoKita: Laravel 11 e-commerce (katalog, keranjang, checkout, riwayat pesanan, panel admin) dengan SQLite.",
+    "keywords": [
+        "laravel",
+        "ecommerce",
+        "tokokita",
+        "sqlite"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",

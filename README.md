@@ -30,6 +30,29 @@ php artisan serve
 
 Akses aplikasi di `http://127.0.0.1:8000`.
 
+## Pengujian
+
+Suite berjalan di atas SQLite in-memory (`phpunit.xml`), jadi tidak perlu
+menyiapkan database terpisah dan perintahnya aman dijalankan di klon bersih.
+
+```bash
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan test
+```
+
+Perintah `composer install` dan `php artisan key:generate` tetap diperlukan
+karena Laravel mem-bootstrap aplikasi sebelum test dijalankan.
+
+Format kode memakai [Laravel Pint](https://laravel.com/docs/pint); CI menolak
+pull request yang belum diformat:
+
+```bash
+./vendor/bin/pint          # rapikan
+./vendor/bin/pint --test   # cek saja, dipakai CI
+```
+
 ## Akun Demo (dari seeder)
 
 | Role    | Email                | Password  |

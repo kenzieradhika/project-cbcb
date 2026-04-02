@@ -84,4 +84,20 @@ class CartTest extends TestCase
 
         $this->assertSame(4, session('cart')[$product->id]);
     }
+
+    public function test_updating_a_deactivated_product_is_rejected(): void
+    {
+        // add() refuses an inactive product; update() must too, or a stale tab
+        // could still change the quantity of one that is no longer for sale.
+        $user = User::factory()->create();
+        $product = $this->product(5);
+        $product->update(['is_active' => false]);
+
+        $response = $this->actingAs($user)
+            ->withSession(['cart' => [$product->id => 1]])
+            ->patch("/cart/{$product->slug}", ['quantity' => 4]);
+
+        $response->assertSessionHas('error');
+        $this->assertSame(1, session('cart')[$product->id]);
+    }
 }

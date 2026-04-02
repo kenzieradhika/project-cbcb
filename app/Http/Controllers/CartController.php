@@ -82,6 +82,12 @@ class CartController extends Controller
             return back()->with('error', 'Produk tidak ada di keranjang.');
         }
 
+        // add() refuses an inactive product; update() must agree, or a stale tab
+        // could still change the quantity of one that is no longer for sale.
+        if (! $product->is_active) {
+            return back()->with('error', 'Produk tidak tersedia.');
+        }
+
         if ($product->stock < 1) {
             return back()->with('error', 'Stok produk habis.');
         }

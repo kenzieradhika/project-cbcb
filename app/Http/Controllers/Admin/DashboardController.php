@@ -15,7 +15,9 @@ class DashboardController extends Controller
             'productCount' => Product::count(),
             'orderCount' => Order::count(),
             'userCount' => User::count(),
-            'revenue' => Order::where('status', '!=', 'cancelled')->sum('total'),
+            // Revenue is money actually collected. Pending orders are not paid
+            // yet and cancelled ones never will be, so count only settled states.
+            'revenue' => Order::whereIn('status', ['paid', 'shipped', 'completed'])->sum('total'),
             'latestOrders' => Order::with('user')->latest()->limit(5)->get(),
         ]);
     }

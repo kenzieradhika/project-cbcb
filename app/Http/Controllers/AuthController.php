@@ -17,6 +17,10 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
+        // SQLite's unique index is case-sensitive, so "Bob@x.test" and
+        // "bob@x.test" were two accounts. Normalise before validating/creating.
+        $request->merge(['email' => strtolower((string) $request->input('email'))]);
+
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -41,6 +45,8 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
+        $request->merge(['email' => strtolower((string) $request->input('email'))]);
+
         $credentials = $request->validate([
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],

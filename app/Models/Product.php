@@ -26,6 +26,28 @@ class Product extends Model
         'is_active' => 'boolean',
     ];
 
+    /**
+     * Total units in the session cart that are still orderable. The cart page
+     * and checkout both skip lines whose product is gone/inactive/out of stock,
+     * so the navbar bubble must agree instead of summing every stored line.
+     *
+     * @param  array<int|string, int>  $cart  product id => quantity
+     */
+    public static function cartCount(array $cart): int
+    {
+        if (empty($cart)) {
+            return 0;
+        }
+
+        $live = static::whereIn('id', array_keys($cart))
+            ->where('is_active', true)
+            ->where('stock', '>=', 1)
+            ->pluck('id')
+            ->all();
+
+        return array_sum(array_intersect_key($cart, array_flip($live)));
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

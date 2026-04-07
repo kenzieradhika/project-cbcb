@@ -341,7 +341,7 @@
                         <li class="nav-item">
                             <a class="nav-link position-relative" href="{{ route('cart.index') }}">
                                 <i class="bi bi-cart3 fs-5"></i>
-                                @php $cartCount = array_sum(session('cart', [])); @endphp
+                                @php $cartCount = \App\Models\Product::cartCount(session('cart', [])); @endphp
                                 @if($cartCount > 0)
                                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">{{ $cartCount }}</span>
                                 @endif

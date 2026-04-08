@@ -46,7 +46,7 @@ class ProductController extends Controller
 
     public function update(Request $request, Product $product)
     {
-        $data = $this->validateData($request, $product);
+        $data = $this->validateData($request);
 
         $data['is_active'] = $request->boolean('is_active');
 
@@ -84,7 +84,7 @@ class ProductController extends Controller
         Storage::disk('public')->delete($image);
     }
 
-    private function validateData(Request $request, ?Product $product = null): array
+    private function validateData(Request $request): array
     {
         return $request->validate([
             'name' => ['required', 'string', 'max:255'],

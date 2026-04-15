@@ -22,6 +22,15 @@ class CheckoutController extends Controller
             if (!$product || !$product->is_active || $product->stock < 1) {
                 continue;
             }
+            // A line whose quantity now exceeds stock cannot be ordered as
+            // stored. Sending the user to the cart to adjust beats showing a
+            // total that store() would then reject.
+            if ($quantity > $product->stock) {
+                return redirect()->route('cart.index')->with(
+                    'error',
+                    "Stok {$product->name} tinggal {$product->stock}. Sesuaikan jumlahnya dulu."
+                );
+            }
             $items[] = ['product' => $product, 'quantity' => $quantity];
             $total += $product->price * $quantity;
         }

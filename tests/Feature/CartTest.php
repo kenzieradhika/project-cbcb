@@ -57,4 +57,31 @@ class CartTest extends TestCase
         $response->assertSessionHas('error');
         $this->assertArrayNotHasKey($product->id, session('cart', []));
     }
+
+    public function test_updating_a_product_not_in_the_cart_does_not_insert_it(): void
+    {
+        // PATCH /cart/{product} is the qty field on the cart page; it must only
+        // change an existing line, not add a product the shopper never chose.
+        $user = User::factory()->create();
+        $product = $this->product(5);
+
+        $response = $this->actingAs($user)
+            ->withSession(['cart' => []])
+            ->patch("/cart/{$product->slug}", ['quantity' => 2]);
+
+        $response->assertSessionHas('error');
+        $this->assertArrayNotHasKey($product->id, session('cart', []));
+    }
+
+    public function test_updating_an_existing_line_changes_the_quantity(): void
+    {
+        $user = User::factory()->create();
+        $product = $this->product(5);
+
+        $this->actingAs($user)
+            ->withSession(['cart' => [$product->id => 1]])
+            ->patch("/cart/{$product->slug}", ['quantity' => 4]);
+
+        $this->assertSame(4, session('cart')[$product->id]);
+    }
 }

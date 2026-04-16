@@ -70,6 +70,15 @@ class CartController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        $cart = $this->cart();
+
+        // update() is the qty field on the cart page; it must only ever change a
+        // line that is already there. A crafted PATCH to a product not in the
+        // cart used to insert it.
+        if (!array_key_exists($product->id, $cart)) {
+            return back()->with('error', 'Produk tidak ada di keranjang.');
+        }
+
         if ($product->stock < 1) {
             return back()->with('error', 'Stok produk habis.');
         }
@@ -78,7 +87,6 @@ class CartController extends Controller
             'quantity' => ['required', 'integer', 'min:1', 'max:' . max($product->stock, 1)],
         ]);
 
-        $cart = $this->cart();
         $cart[$product->id] = (int) $request->input('quantity');
         $this->saveCart($cart);
 

@@ -42,7 +42,10 @@ Route::prefix('admin')
     ->middleware(['auth', 'admin'])
     ->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-        Route::resource('products', AdminProductController::class);
+        // No show view: the admin edits a product in place, so only register the
+        // routes the controller implements. The default resource route set would
+        // map GET admin/products/{product} to a missing show() method (500).
+        Route::resource('products', AdminProductController::class)->except('show');
         Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
         Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
         Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');

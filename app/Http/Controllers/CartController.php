@@ -26,7 +26,7 @@ class CartController extends Controller
 
         foreach ($cart as $productId => $quantity) {
             $product = Product::find($productId);
-            if (!$product || $product->stock < 1) {
+            if (! $product || $product->stock < 1) {
                 continue;
             }
             $items[] = [
@@ -42,7 +42,7 @@ class CartController extends Controller
 
     public function add(Request $request, Product $product)
     {
-        if (!$product->is_active) {
+        if (! $product->is_active) {
             return back()->with('error', 'Produk tidak tersedia.');
         }
 
@@ -51,7 +51,7 @@ class CartController extends Controller
         }
 
         $request->validate([
-            'quantity' => ['required', 'integer', 'min:1', 'max:' . max($product->stock, 1)],
+            'quantity' => ['required', 'integer', 'min:1', 'max:'.max($product->stock, 1)],
         ]);
 
         $cart = $this->cart();
@@ -75,7 +75,7 @@ class CartController extends Controller
         // update() is the qty field on the cart page; it must only ever change a
         // line that is already there. A crafted PATCH to a product not in the
         // cart used to insert it.
-        if (!array_key_exists($product->id, $cart)) {
+        if (! array_key_exists($product->id, $cart)) {
             return back()->with('error', 'Produk tidak ada di keranjang.');
         }
 
@@ -84,7 +84,7 @@ class CartController extends Controller
         }
 
         $request->validate([
-            'quantity' => ['required', 'integer', 'min:1', 'max:' . max($product->stock, 1)],
+            'quantity' => ['required', 'integer', 'min:1', 'max:'.max($product->stock, 1)],
         ]);
 
         $cart[$product->id] = (int) $request->input('quantity');

@@ -26,7 +26,7 @@ class ProductController extends Controller
     {
         $data = $this->validateData($request);
 
-        $data['slug'] = Str::slug($data['name']) . '-' . Str::lower(Str::random(5));
+        $data['slug'] = Str::slug($data['name']).'-'.Str::lower(Str::random(5));
         $data['is_active'] = $request->boolean('is_active');
 
         if ($request->hasFile('image')) {
@@ -77,7 +77,7 @@ class ProductController extends Controller
      */
     private function deleteImageFile(?string $image): void
     {
-        if (!$image || str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
+        if (! $image || str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
             return;
         }
 

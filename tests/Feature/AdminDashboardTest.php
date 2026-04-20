@@ -12,7 +12,7 @@ class AdminDashboardTest extends TestCase
     {
         Order::create([
             'user_id' => User::factory()->create()->id,
-            'order_number' => 'ORD-' . uniqid(),
+            'order_number' => 'ORD-'.uniqid(),
             'customer_name' => 'Budi',
             'shipping_address' => 'Jl. Mawar 1',
             'status' => $status,

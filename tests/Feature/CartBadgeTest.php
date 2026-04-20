@@ -16,7 +16,7 @@ class CartBadgeTest extends TestCase
         $user = User::factory()->create();
         $product = Product::create([
             'name' => 'Kaos',
-            'slug' => 'k-' . uniqid(),
+            'slug' => 'k-'.uniqid(),
             'description' => 'd',
             'price' => 1000,
             'stock' => 5,
@@ -36,7 +36,7 @@ class CartBadgeTest extends TestCase
         $user = User::factory()->create();
         $product = Product::create([
             'name' => 'Kaos',
-            'slug' => 'k-' . uniqid(),
+            'slug' => 'k-'.uniqid(),
             'description' => 'd',
             'price' => 1000,
             'stock' => 5,

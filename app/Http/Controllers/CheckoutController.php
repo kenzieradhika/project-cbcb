@@ -19,7 +19,7 @@ class CheckoutController extends Controller
 
         foreach ($cart as $productId => $quantity) {
             $product = Product::find($productId);
-            if (!$product || !$product->is_active || $product->stock < 1) {
+            if (! $product || ! $product->is_active || $product->stock < 1) {
                 continue;
             }
             // A line whose quantity now exceeds stock cannot be ordered as
@@ -62,12 +62,12 @@ class CheckoutController extends Controller
 
                 foreach ($cart as $productId => $quantity) {
                     $product = Product::lockForUpdate()->find($productId);
-                    if (!$product || !$product->is_active || $product->stock < $quantity) {
+                    if (! $product || ! $product->is_active || $product->stock < $quantity) {
                         // ValidationException (not a bare \Exception) so the
                         // controller redirects back with the message on the form
                         // instead of surfacing a 500 page.
                         throw ValidationException::withMessages([
-                            'cart' => 'Stok produk ' . ($product?->name ?? "#{$productId}") . ' tidak mencukupi.',
+                            'cart' => 'Stok produk '.($product?->name ?? "#{$productId}").' tidak mencukupi.',
                         ]);
                     }
 
@@ -84,7 +84,7 @@ class CheckoutController extends Controller
 
                 $order = Order::create([
                     'user_id' => auth()->id(),
-                    'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+                    'order_number' => 'ORD-'.strtoupper(Str::random(10)),
                     'customer_name' => $data['customer_name'],
                     'customer_phone' => $data['customer_phone'] ?? null,
                     'shipping_address' => $data['shipping_address'],

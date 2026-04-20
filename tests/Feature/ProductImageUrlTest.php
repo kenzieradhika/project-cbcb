@@ -11,7 +11,7 @@ class ProductImageUrlTest extends TestCase
     {
         return Product::create(array_merge([
             'name' => 'Kaos',
-            'slug' => 'kaos-' . uniqid(),
+            'slug' => 'kaos-'.uniqid(),
             'description' => 'd',
             'price' => 1000,
             'stock' => 1,

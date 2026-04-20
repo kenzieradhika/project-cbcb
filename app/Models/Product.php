@@ -61,7 +61,7 @@ class Product extends Model
     protected function imageUrl(): Attribute
     {
         return Attribute::get(function (): ?string {
-            if (!$this->image) {
+            if (! $this->image) {
                 return null;
             }
 

@@ -18,7 +18,7 @@ class ProductDeletionTest extends TestCase
         $user = User::factory()->create();
         $product = Product::create([
             'name' => 'Kaos',
-            'slug' => 'kaos-' . uniqid(),
+            'slug' => 'kaos-'.uniqid(),
             'description' => 'd',
             'price' => 1000,
             'stock' => 5,
@@ -26,7 +26,7 @@ class ProductDeletionTest extends TestCase
         ]);
         $order = Order::create([
             'user_id' => $user->id,
-            'order_number' => 'ORD-' . uniqid(),
+            'order_number' => 'ORD-'.uniqid(),
             'customer_name' => 'Budi',
             'shipping_address' => 'Jl. Mawar 1',
             'status' => 'pending',

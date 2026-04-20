@@ -51,11 +51,11 @@ class DatabaseSeeder extends Seeder
             Product::firstOrCreate(
                 ['name' => $name],
                 [
-                    'slug' => Str::slug($name) . '-' . Str::lower(Str::random(5)),
+                    'slug' => Str::slug($name).'-'.Str::lower(Str::random(5)),
                     'description' => $description,
                     'price' => $price,
                     'stock' => $stock,
-                    'image' => 'https://picsum.photos/seed/' . Str::slug($name) . '/600/400',
+                    'image' => 'https://picsum.photos/seed/'.Str::slug($name).'/600/400',
                     'is_active' => true,
                 ]
             );

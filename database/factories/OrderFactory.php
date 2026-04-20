@@ -2,12 +2,13 @@
 
 namespace Database\Factories;
 
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Order>
+ * @extends Factory<Order>
  */
 class OrderFactory extends Factory
 {
@@ -15,7 +16,7 @@ class OrderFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+            'order_number' => 'ORD-'.strtoupper(Str::random(10)),
             'customer_name' => fake()->name(),
             'customer_phone' => null,
             'shipping_address' => fake()->address(),

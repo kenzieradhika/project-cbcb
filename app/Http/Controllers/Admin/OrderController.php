@@ -38,7 +38,7 @@ class OrderController extends Controller
         DB::transaction(function () use ($order, $status, $restock, $unstock) {
             if ($restock || $unstock) {
                 foreach ($order->items as $item) {
-                    if (!$item->product_id) {
+                    if (! $item->product_id) {
                         continue;  // product was deleted; nothing to restock
                     }
                     $item->product()->increment('stock', $restock ? $item->quantity : -$item->quantity);

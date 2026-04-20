@@ -13,7 +13,7 @@ class CheckoutStockTest extends TestCase
     {
         return Product::create([
             'name' => 'Kaos',
-            'slug' => 'kaos-' . uniqid(),
+            'slug' => 'kaos-'.uniqid(),
             'description' => 'd',
             'price' => 1000,
             'stock' => $stock,

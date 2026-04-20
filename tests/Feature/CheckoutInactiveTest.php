@@ -17,7 +17,7 @@ class CheckoutInactiveTest extends TestCase
         $user = User::factory()->create();
         $product = Product::create([
             'name' => 'Kaos',
-            'slug' => 'kaos-' . uniqid(),
+            'slug' => 'kaos-'.uniqid(),
             'description' => 'd',
             'price' => 1000,
             'stock' => 5,

@@ -6,7 +6,6 @@ use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
@@ -84,7 +83,7 @@ class CheckoutController extends Controller
 
                 $order = Order::create([
                     'user_id' => auth()->id(),
-                    'order_number' => 'ORD-'.strtoupper(Str::random(10)),
+                    'order_number' => Order::generateNumber(),
                     'customer_name' => $data['customer_name'],
                     'customer_phone' => $data['customer_phone'] ?? null,
                     'shipping_address' => $data['shipping_address'],

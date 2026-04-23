@@ -26,7 +26,10 @@ class CartController extends Controller
 
         foreach ($cart as $productId => $quantity) {
             $product = Product::find($productId);
-            if (! $product || $product->stock < 1) {
+            // Same skip rule as checkout: a line whose product is gone, inactive
+            // or out of stock must not count toward the total, or the cart page
+            // and the checkout summary would disagree.
+            if (! $product || ! $product->is_active || $product->stock < 1) {
                 continue;
             }
             $items[] = [

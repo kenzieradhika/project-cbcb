@@ -84,4 +84,27 @@ class AdminOrderStatusTest extends TestCase
 
         $this->assertSame(3, $product->fresh()->stock);
     }
+
+    public function test_uncancelling_is_refused_when_the_stock_was_resold(): void
+    {
+        // Cancel returns the units; if they sell out afterwards, un-cancelling
+        // used to increment by a negative and drive stock below zero.
+        $product = $this->product(3);
+        $order = $this->orderFor($product);
+        $admin = $this->admin();
+
+        $this->actingAs($admin)
+            ->patch("/admin/orders/{$order->id}/status", ['status' => 'cancelled']);
+        $this->assertSame(5, $product->fresh()->stock);
+
+        // Someone else buys the returned stock.
+        $product->update(['stock' => 0]);
+
+        $this->actingAs($admin)
+            ->patch("/admin/orders/{$order->id}/status", ['status' => 'paid'])
+            ->assertSessionHas('error');
+
+        $this->assertSame(0, $product->fresh()->stock);
+        $this->assertSame('cancelled', $order->fresh()->status);
+    }
 }

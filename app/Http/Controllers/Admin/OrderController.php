@@ -35,6 +35,21 @@ class OrderController extends Controller
         $restock = $status === 'cancelled' && $order->status !== 'cancelled';
         $unstock = $status !== 'cancelled' && $order->status === 'cancelled';
 
+        // Un-cancelling re-commits the units to the order. If they were sold in
+        // the meantime there is nothing left to take, and incrementing by a
+        // negative amount would drive stock below zero. Refuse instead.
+        if ($unstock) {
+            foreach ($order->items as $item) {
+                if (! $item->product_id) {
+                    continue;
+                }
+                $product = $item->product;
+                if ($product && $product->stock < $item->quantity) {
+                    return back()->with('error', "Stok {$product->name} tidak cukup untuk mengaktifkan kembali pesanan ini.");
+                }
+            }
+        }
+
         DB::transaction(function () use ($order, $status, $restock, $unstock) {
             if ($restock || $unstock) {
                 foreach ($order->items as $item) {

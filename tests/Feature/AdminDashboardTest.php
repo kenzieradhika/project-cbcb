@@ -36,4 +36,18 @@ class AdminDashboardTest extends TestCase
             ->assertSee('85.000')       // number_format(85000, 0, ',', '.')
             ->assertDontSee('196.111'); // the old sum that included the pending order
     }
+
+    public function test_customer_count_excludes_admins(): void
+    {
+        // The dashboard card is labelled "Pelanggan"; counting admin accounts
+        // too overstated the shopper base.
+        User::factory()->count(7)->create(['is_admin' => false]);
+        User::factory()->count(3)->create(['is_admin' => true]);
+
+        $this->actingAs(User::factory()->create(['is_admin' => true]))
+            ->get('/admin')
+            ->assertOk()
+            ->assertSee('>7</div>', false)   // userCount
+            ->assertDontSee('>10</div>', false);
+    }
 }

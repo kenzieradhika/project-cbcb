@@ -14,7 +14,9 @@ class DashboardController extends Controller
         return view('admin.dashboard', [
             'productCount' => Product::count(),
             'orderCount' => Order::count(),
-            'userCount' => User::count(),
+            // The card is labelled "Pelanggan" (customers); counting admins too
+            // overstated the shopper base by one on every install.
+            'userCount' => User::where('is_admin', false)->count(),
             // Revenue is money actually collected. Pending orders are not paid
             // yet and cancelled ones never will be, so count only settled states.
             'revenue' => Order::whereIn('status', ['paid', 'shipped', 'completed'])->sum('total'),

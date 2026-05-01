@@ -29,6 +29,9 @@
     @endif
 </div>
 <div class="mb-4 form-check form-switch">
+    {{-- A hidden field makes the unchecked state explicit: an unchecked box sends
+         nothing, so the controller and old() would both treat "off" as missing. --}}
+    <input type="hidden" name="is_active" value="0">
     <input type="checkbox" name="is_active" value="1" class="form-check-input" id="isActive" {{ old('is_active', $product?->is_active ?? true) ? 'checked' : '' }}>
     <label class="form-check-label" for="isActive">Produk aktif (tampil di toko)</label>
 </div>

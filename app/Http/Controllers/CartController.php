@@ -110,9 +110,4 @@ class CartController extends Controller
 
         return back()->with('success', 'Produk dihapus dari keranjang.');
     }
-
-    public function count(): int
-    {
-        return array_sum($this->cart());
-    }
 }

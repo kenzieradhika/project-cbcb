@@ -27,7 +27,7 @@
                     @foreach($orders as $order)
                         <tr>
                             <td class="fw-semibold">{{ $order->order_number }}</td>
-                            <td>{{ $order->created_at->format('d M Y H:i') }}</td>
+                            <td>{{ $order->created_at->translatedFormat('d M Y H:i') }}</td>
                             <td>@include('partials.order-status-badge', ['status' => $order->status])</td>
                             <td class="text-end fw-bold">Rp {{ number_format($order->total, 0, ',', '.') }}</td>
                             <td class="text-end"><a href="{{ route('orders.show', $order) }}" class="btn btn-sm btn-outline-primary">Detail</a></td>

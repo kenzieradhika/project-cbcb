@@ -24,6 +24,7 @@ return [
         'string' => 'Kolom :attribute maksimal :max karakter.',
         'integer' => 'Kolom :attribute maksimal :max.',
         'array' => 'Kolom :attribute maksimal berisi :max item.',
+        'file' => 'Kolom :attribute maksimal :max kilobyte.',
     ],
     'in' => 'Nilai :attribute yang dipilih tidak valid.',
     'image' => 'Kolom :attribute harus berupa gambar.',

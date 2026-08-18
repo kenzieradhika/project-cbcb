@@ -3,15 +3,16 @@
 @section('title', 'Beranda')
 
 @section('content')
-    <div class="p-5 mb-4 bg-dark text-white rounded-4">
+    <div class="hero-cartoon p-5 mb-5">
         <div class="container py-4">
-            <h1 class="display-5 fw-bold">Selamat datang di TokoKita</h1>
-            <p class="lead mb-4">Temukan produk terbaik dengan harga terjangkau. Belanja mudah, aman, dan cepat.</p>
-            <a href="#produk" class="btn btn-warning btn-lg"><i class="bi bi-bag me-1"></i>Mulai Belanja</a>
+            <span class="hero-emoji">🧁</span>
+            <h1 class="display-4 fw-bold">Selamat datang di TokoKita! 💖</h1>
+            <p class="lead mb-4">Temukan produk terbaik dengan harga terjangkau. Belanja mudah, aman, dan cepat. 🌸</p>
+            <a href="#produk" class="btn btn-cartoon btn-lg"><i class="bi bi-bag me-1"></i>Mulai Belanja</a>
         </div>
     </div>
 
-    <h2 class="mb-4" id="produk"><i class="bi bi-grid-3x3-gap me-2"></i>Produk Terbaru</h2>
+    <h2 class="mb-4" id="produk">🧸 Produk Terbaru</h2>
 
     @if($products->count() === 0)
         <div class="alert alert-info">Belum ada produk tersedia. Silakan cek kembali nanti.</div>

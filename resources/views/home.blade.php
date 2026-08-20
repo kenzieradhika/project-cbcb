@@ -5,14 +5,13 @@
 @section('content')
     <div class="hero-cartoon p-5 mb-5">
         <div class="container py-4">
-            <span class="hero-emoji">🧁</span>
-            <h1 class="display-4 fw-bold">Selamat datang di TokoKita! 💖</h1>
-            <p class="lead mb-4">Temukan produk terbaik dengan harga terjangkau. Belanja mudah, aman, dan cepat. 🌸</p>
+            <h1 class="display-4 fw-bold mb-3">TokoKita<br><span style="color: var(--retro-ink); background: var(--retro-mustard); padding: 0 .25rem;">Est. 2026</span></h1>
+            <p class="lead mb-4">Produk pilihan dengan harga bersahabat. Belanja mudah, aman, dan cepat.</p>
             <a href="#produk" class="btn btn-cartoon btn-lg"><i class="bi bi-bag me-1"></i>Mulai Belanja</a>
         </div>
     </div>
 
-    <h2 class="mb-4" id="produk">🧸 Produk Terbaru</h2>
+    <h2 class="mb-4" id="produk">Produk Terbaru</h2>
 
     @if($products->count() === 0)
         <div class="alert alert-info">Belum ada produk tersedia. Silakan cek kembali nanti.</div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
@@ -26,7 +27,26 @@ class OrderController extends Controller
             'status' => ['required', 'in:pending,paid,shipped,completed,cancelled'],
         ]);
 
-        $order->update(['status' => $request->input('status')]);
+        $status = $request->input('status');
+
+        // Cancelling an order must return its items to stock, and un-cancelling a
+        // cancelled order must take them back out -- otherwise stock drifts from
+        // the catalogue on every status flip.
+        $restock = $status === 'cancelled' && $order->status !== 'cancelled';
+        $unstock = $status !== 'cancelled' && $order->status === 'cancelled';
+
+        DB::transaction(function () use ($order, $status, $restock, $unstock) {
+            if ($restock || $unstock) {
+                foreach ($order->items as $item) {
+                    if (!$item->product_id) {
+                        continue;  // product was deleted; nothing to restock
+                    }
+                    $item->product()->increment('stock', $restock ? $item->quantity : -$item->quantity);
+                }
+            }
+
+            $order->update(['status' => $status]);
+        });
 
         return back()->with('success', 'Status pesanan diperbarui.');
     }

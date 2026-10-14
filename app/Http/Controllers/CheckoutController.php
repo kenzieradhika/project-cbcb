@@ -19,7 +19,7 @@ class CheckoutController extends Controller
 
         foreach ($cart as $productId => $quantity) {
             $product = Product::find($productId);
-            if (!$product || $product->stock < 1) {
+            if (!$product || !$product->is_active || $product->stock < 1) {
                 continue;
             }
             $items[] = ['product' => $product, 'quantity' => $quantity];
@@ -53,7 +53,7 @@ class CheckoutController extends Controller
 
                 foreach ($cart as $productId => $quantity) {
                     $product = Product::lockForUpdate()->find($productId);
-                    if (!$product || $product->stock < $quantity) {
+                    if (!$product || !$product->is_active || $product->stock < $quantity) {
                         // ValidationException (not a bare \Exception) so the
                         // controller redirects back with the message on the form
                         // instead of surfacing a 500 page.

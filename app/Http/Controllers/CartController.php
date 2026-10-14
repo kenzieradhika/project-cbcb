@@ -42,6 +42,10 @@ class CartController extends Controller
 
     public function add(Request $request, Product $product)
     {
+        if (!$product->is_active) {
+            return back()->with('error', 'Produk tidak tersedia.');
+        }
+
         if ($product->stock < 1) {
             return back()->with('error', 'Stok produk habis.');
         }

@@ -43,4 +43,18 @@ class CartTest extends TestCase
 
         $this->assertSame(2, session('cart')[$product->id]);
     }
+
+    public function test_adding_an_inactive_product_is_rejected(): void
+    {
+        // The storefront hides inactive products, but cart.add has no is_active
+        // check, so a direct POST (or a stale tab) could still order one.
+        $user = User::factory()->create();
+        $product = $this->product(5);
+        $product->update(['is_active' => false]);
+
+        $response = $this->actingAs($user)->post("/cart/{$product->slug}", ['quantity' => 1]);
+
+        $response->assertSessionHas('error');
+        $this->assertArrayNotHasKey($product->id, session('cart', []));
+    }
 }

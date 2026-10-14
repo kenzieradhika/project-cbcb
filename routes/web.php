@@ -16,9 +16,10 @@ Route::get('/products/{product}', [ProductController::class, 'show'])->name('pro
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'register'])->middleware('throttle:6,1');
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login']);
+    // Throttle the credential POST so the login form cannot be brute-forced.
+    Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:6,1');
 });
 
 Route::middleware('auth')->group(function () {

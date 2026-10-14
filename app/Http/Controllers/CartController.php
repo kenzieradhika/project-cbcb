@@ -42,6 +42,10 @@ class CartController extends Controller
 
     public function add(Request $request, Product $product)
     {
+        if ($product->stock < 1) {
+            return back()->with('error', 'Stok produk habis.');
+        }
+
         $request->validate([
             'quantity' => ['required', 'integer', 'min:1', 'max:' . max($product->stock, 1)],
         ]);
@@ -62,6 +66,10 @@ class CartController extends Controller
 
     public function update(Request $request, Product $product)
     {
+        if ($product->stock < 1) {
+            return back()->with('error', 'Stok produk habis.');
+        }
+
         $request->validate([
             'quantity' => ['required', 'integer', 'min:1', 'max:' . max($product->stock, 1)],
         ]);

@@ -21,7 +21,7 @@
         @foreach($products as $product)
             <div class="col-6 col-md-4 col-lg-3">
                 <div class="card product-card h-100">
-                    <img src="{{ $product->image ?: 'https://placehold.co/600x400?text=Produk' }}" class="card-img-top product-img" alt="{{ $product->name }}">
+                    <img src="{{ $product->image_url ?: 'https://placehold.co/600x400?text=Produk' }}" class="card-img-top product-img" alt="{{ $product->name }}">
                     <div class="card-body d-flex flex-column">
                         <h6 class="card-title">{{ $product->name }}</h6>
                         <p class="card-text small text-muted">{{ Str::limit($product->description, 60) }}</p>

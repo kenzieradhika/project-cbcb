@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -51,6 +52,7 @@ class ProductController extends Controller
 
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('products', 'public');
+            $this->deleteImageFile($product->getOriginal('image'));
         }
 
         $product->update($data);
@@ -61,10 +63,25 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        $this->deleteImageFile($product->getOriginal('image'));
         $product->delete();
 
         return redirect()->route('admin.products.index')
             ->with('success', 'Produk berhasil dihapus.');
+    }
+
+    /**
+     * Remove an uploaded image from the public disk. Seeded products store an
+     * absolute https URL, which is not ours to delete -- only disk-relative
+     * upload paths are removed.
+     */
+    private function deleteImageFile(?string $image): void
+    {
+        if (!$image || str_starts_with($image, 'http://') || str_starts_with($image, 'https://')) {
+            return;
+        }
+
+        Storage::disk('public')->delete($image);
     }
 
     private function validateData(Request $request, ?Product $product = null): array

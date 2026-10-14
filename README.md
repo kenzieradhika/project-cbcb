@@ -24,6 +24,7 @@ cp .env.example .env
 touch database/database.sqlite
 php artisan key:generate
 php artisan migrate --seed
+php artisan storage:link
 php artisan serve
 ```
 

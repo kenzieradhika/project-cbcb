@@ -7,6 +7,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutController extends Controller
 {
@@ -45,49 +46,58 @@ class CheckoutController extends Controller
             return back()->with('error', 'Keranjang kosong.');
         }
 
-        $order = DB::transaction(function () use ($cart, $data) {
-            $total = 0;
-            $items = [];
+        try {
+            $order = DB::transaction(function () use ($cart, $data) {
+                $total = 0;
+                $items = [];
 
-            foreach ($cart as $productId => $quantity) {
-                $product = Product::lockForUpdate()->find($productId);
-                if (!$product || $product->stock < $quantity) {
-                    throw new \Exception("Stok produk {$product?->name} tidak mencukupi.");
+                foreach ($cart as $productId => $quantity) {
+                    $product = Product::lockForUpdate()->find($productId);
+                    if (!$product || $product->stock < $quantity) {
+                        // ValidationException (not a bare \Exception) so the
+                        // controller redirects back with the message on the form
+                        // instead of surfacing a 500 page.
+                        throw ValidationException::withMessages([
+                            'cart' => 'Stok produk ' . ($product?->name ?? "#{$productId}") . ' tidak mencukupi.',
+                        ]);
+                    }
+
+                    $subtotal = $product->price * $quantity;
+                    $total += $subtotal;
+                    $items[] = [
+                        'product' => $product,
+                        'quantity' => $quantity,
+                        'subtotal' => $subtotal,
+                    ];
+
+                    $product->decrement('stock', $quantity);
                 }
 
-                $subtotal = $product->price * $quantity;
-                $total += $subtotal;
-                $items[] = [
-                    'product' => $product,
-                    'quantity' => $quantity,
-                    'subtotal' => $subtotal,
-                ];
-
-                $product->decrement('stock', $quantity);
-            }
-
-            $order = Order::create([
-                'user_id' => auth()->id(),
-                'order_number' => 'ORD-' . strtoupper(Str::random(10)),
-                'customer_name' => $data['customer_name'],
-                'customer_phone' => $data['customer_phone'] ?? null,
-                'shipping_address' => $data['shipping_address'],
-                'status' => 'pending',
-                'total' => $total,
-            ]);
-
-            foreach ($items as $item) {
-                $order->items()->create([
-                    'product_id' => $item['product']->id,
-                    'product_name' => $item['product']->name,
-                    'price' => $item['product']->price,
-                    'quantity' => $item['quantity'],
-                    'subtotal' => $item['subtotal'],
+                $order = Order::create([
+                    'user_id' => auth()->id(),
+                    'order_number' => 'ORD-' . strtoupper(Str::random(10)),
+                    'customer_name' => $data['customer_name'],
+                    'customer_phone' => $data['customer_phone'] ?? null,
+                    'shipping_address' => $data['shipping_address'],
+                    'status' => 'pending',
+                    'total' => $total,
                 ]);
-            }
 
-            return $order;
-        });
+                foreach ($items as $item) {
+                    $order->items()->create([
+                        'product_id' => $item['product']->id,
+                        'product_name' => $item['product']->name,
+                        'price' => $item['product']->price,
+                        'quantity' => $item['quantity'],
+                        'subtotal' => $item['subtotal'],
+                    ]);
+                }
+
+                return $order;
+            });
+        } catch (ValidationException $e) {
+            return back()->with('error', $e->validator->errors()->first('cart'));
+        }
 
         session()->forget('cart');
 

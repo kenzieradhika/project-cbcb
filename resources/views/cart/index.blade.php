@@ -28,7 +28,7 @@
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center gap-3">
-                                    <img src="{{ $item['product']->image ?: 'https://placehold.co/200x150?text=Produk' }}" width="64" height="48" style="object-fit: cover" class="rounded" alt="">
+                                    <img src="{{ $item['product']->image_url ?: 'https://placehold.co/200x150?text=Produk' }}" width="64" height="48" style="object-fit: cover" class="rounded" alt="">
                                     <div>
                                         <a href="{{ route('products.show', $item['product']) }}" class="text-decoration-none text-dark fw-semibold">{{ $item['product']->name }}</a>
                                         @if($item['product']->stock < $item['quantity'])

@@ -12,7 +12,7 @@
 
     <div class="row g-4">
         <div class="col-md-6">
-            <img src="{{ $product->image ?: 'https://placehold.co/800x600?text=Produk' }}" class="img-fluid rounded-4 w-100" alt="{{ $product->name }}" style="object-fit: cover; max-height: 480px;">
+            <img src="{{ $product->image_url ?: 'https://placehold.co/800x600?text=Produk' }}" class="img-fluid rounded-4 w-100" alt="{{ $product->name }}" style="object-fit: cover; max-height: 480px;">
         </div>
         <div class="col-md-6">
             <h1 class="mb-2">{{ $product->name }}</h1>
@@ -49,7 +49,7 @@
         @foreach($related as $product)
             <div class="col-6 col-md-3">
                 <div class="card product-card h-100">
-                    <img src="{{ $product->image ?: 'https://placehold.co/600x400?text=Produk' }}" class="card-img-top product-img" alt="{{ $product->name }}">
+                    <img src="{{ $product->image_url ?: 'https://placehold.co/600x400?text=Produk' }}" class="card-img-top product-img" alt="{{ $product->name }}">
                     <div class="card-body">
                         <h6 class="card-title">{{ $product->name }}</h6>
                         <div class="price">Rp {{ number_format($product->price, 0, ',', '.') }}</div>

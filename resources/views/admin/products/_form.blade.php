@@ -24,8 +24,8 @@
     <label class="form-label">Gambar Produk</label>
     <input type="file" name="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
     @error('image') <div class="invalid-feedback">{{ $message }}</div> @enderror
-    @if($product?->image)
-        <img src="{{ $product->image }}" width="120" height="90" style="object-fit: cover" class="rounded mt-2" alt="">
+    @if($product?->image_url)
+        <img src="{{ $product->image_url }}" width="120" height="90" style="object-fit: cover" class="rounded mt-2" alt="">
     @endif
 </div>
 <div class="mb-4 form-check form-switch">

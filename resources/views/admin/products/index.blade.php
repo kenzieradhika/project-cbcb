@@ -25,7 +25,7 @@
                     @forelse($products as $product)
                         <tr>
                             <td>
-                                <img src="{{ $product->image ?: 'https://placehold.co/100x75?text=Produk' }}" width="60" height="45" style="object-fit: cover" class="rounded" alt="">
+                                <img src="{{ $product->image_url ?: 'https://placehold.co/100x75?text=Produk' }}" width="60" height="45" style="object-fit: cover" class="rounded" alt="">
                             </td>
                             <td class="fw-semibold">{{ $product->name }}</td>
                             <td class="text-end">Rp {{ number_format($product->price, 0, ',', '.') }}</td>

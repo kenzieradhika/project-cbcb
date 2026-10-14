@@ -46,15 +46,19 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($products as [$name, $description, $price, $stock]) {
-            Product::create([
-                'name' => $name,
-                'slug' => Str::slug($name) . '-' . Str::lower(Str::random(5)),
-                'description' => $description,
-                'price' => $price,
-                'stock' => $stock,
-                'image' => 'https://picsum.photos/seed/' . Str::slug($name) . '/600/400',
-                'is_active' => true,
-            ]);
+            // firstOrCreate on the name so re-running the seeder (a common thing
+            // after adding a product here) does not duplicate the catalogue.
+            Product::firstOrCreate(
+                ['name' => $name],
+                [
+                    'slug' => Str::slug($name) . '-' . Str::lower(Str::random(5)),
+                    'description' => $description,
+                    'price' => $price,
+                    'stock' => $stock,
+                    'image' => 'https://picsum.photos/seed/' . Str::slug($name) . '/600/400',
+                    'is_active' => true,
+                ]
+            );
         }
     }
 }

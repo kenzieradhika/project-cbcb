@@ -70,7 +70,7 @@ class CheckoutController extends Controller
                 'user_id' => auth()->id(),
                 'order_number' => 'ORD-' . strtoupper(Str::random(10)),
                 'customer_name' => $data['customer_name'],
-                'customer_phone' => $data['customer_phone'],
+                'customer_phone' => $data['customer_phone'] ?? null,
                 'shipping_address' => $data['shipping_address'],
                 'status' => 'pending',
                 'total' => $total,
